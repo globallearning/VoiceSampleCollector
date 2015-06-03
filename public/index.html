@@ -1,5 +1,9 @@
 <html>
 <head>
+
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="962795176566-m71tb4lqu3v3miej6l3ninql2c50mu4j.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
 <script>
 
 //Based on http://typedarray.org/from-microphone-to-wav-with-getusermedia-and-web-audio/
@@ -16,6 +20,7 @@ var audioContext = null;
 var context = null;
 function outputElement(){return document.getElementById('audioOutput')};
 var outputString;
+var blob;
 
 // feature detection 
 if (!navigator.getUserMedia)
@@ -49,7 +54,7 @@ function stopRecording(){
 	document.getElementById("startRecordingButton").disabled=false;
     document.getElementById("speakSampleButton").disabled=false;
       document.getElementById("listenToSampleButton").disabled=false;
-      document.getElementById("downloadSampleButton").disabled=false;
+      document.getElementById("downloadSampleButton").disabled=true;
         
         // we stop recording
         recording = false;
@@ -94,7 +99,7 @@ function stopRecording(){
         }
         
         // our final binary blob
-        var blob = new Blob ( [ view ], { type : 'audio/wav' } );
+        blob = new Blob ( [ view ], { type : 'audio/wav' } );
         
         // let's save it locally
         outputElement().innerHTML = 'Preparing audio sample...';
@@ -185,22 +190,26 @@ function speechEnded()
 	document.getElementById("startRecordingButton").disabled=false;
       document.getElementById("speakSampleButton").disabled=false;
 }
-function startSpeech(words)
+function startSpeech()
 {
+	words=document.getElementById("wordsToSpeak").textContent;
 	document.getElementById("startRecordingButton").disabled=true;
 	speak(words);
 }
 function listenToSample()
 {
+      document.getElementById("listenToSampleButton").disabled=true;
 	document.getElementById("startRecordingButton").disabled=true;
       document.getElementById("speakSampleButton").disabled=true;
       document.getElementById("recordedSamplePlayer").play();
 }
 function samplePlayingEnded()
 {
+      document.getElementById("listenToSampleButton").disabled=false;
 	document.getElementById("stopRecordingButton").disabled=true;
 	document.getElementById("startRecordingButton").disabled=false;
       document.getElementById("speakSampleButton").disabled=false;
+      document.getElementById("downloadSampleButton").disabled=false;
 }
 function downloadSample()
 {
@@ -210,102 +219,63 @@ function downloadSample()
         var click = document.createEvent("Event");
         click.initEvent("click", true, true);
         link.dispatchEvent(click);
+        
+	  var XHR = new XMLHttpRequest();
+	  var FD  = new FormData();
+
+	  // We push our data into our FormData object
+		FD.append("userPhoto", blob);
+
+	  // We define what will happen if the data are successfully sent
+	  XHR.addEventListener('load', function(event) {
+		alert('Yeah! Data sent and response loaded.');
+	  });
+
+	  // We define what will happen in case of error
+	  XHR.addEventListener('error', function(event) {
+		alert('Oups! Something goes wrong.');
+	  });
+
+	  // We setup our request
+	  XHR.open('POST', '/api/photo');
+
+	  // We just send our FormData object, HTTP headers are set automatically
+	  XHR.send(FD);
 }
 </script>
+    <script>
+      function onGoogleSignIn(googleUser) {
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log("Name: " + profile.getName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+        
+        document.getElementById("speakSampleButton").disabled=false;
+      };
+    </script>
 </head>
 <body>
+
 <div id="audio"></div>
-<script>
-// This is called with the results from from FB.getLoginStatus().
-  function statusChangeCallback(response) {
-    console.log('statusChangeCallback');
-    console.log(response);
-    // The response object is returned with a status field that lets the
-    // app know the current login status of the person.
-    // Full docs on the response object can be found in the documentation
-    // for FB.getLoginStatus().
-    if (response.status === 'connected') {
-      // Logged into your app and Facebook.
-      testAPI();
-      document.getElementById("speakSampleButton").disabled=false;
-    } else if (response.status === 'not_authorized') {
-      // The person is logged into Facebook, but not your app.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into this app.';
-    } else {
-      // The person is not logged into Facebook, so we're not sure if
-      // they are logged into this app or not.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into Facebook.';
-    }
-  }
-
-  // This function is called when someone finishes with the Login
-  // Button.  See the onlogin handler attached to it in the sample
-  // code below.
-  function checkLoginState() {
-    FB.getLoginStatus(function(response) {
-      statusChangeCallback(response);
-    });
-  }
-
-  // Now that we've initialized the JavaScript SDK, we call 
-  // FB.getLoginStatus().  This function gets the state of the
-  // person visiting this page and can return one of three states to
-  // the callback you provide.  They can be:
-  //
-  // 1. Logged into your app ('connected')
-  // 2. Logged into Facebook, but not your app ('not_authorized')
-  // 3. Not logged into Facebook and can't tell if they are logged into
-  //    your app or not.
-  //
-  // These three cases are handled in the callback function.
-
-  
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '1632093353672522',
-      xfbml      : true,
-      version    : 'v2.3'
-    });
-    
-	  FB.getLoginStatus(function(response) {
-		statusChangeCallback(response);
-	  });
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-   
-   
-  // Here we run a very simple test of the Graph API after login is
-  // successful.  See statusChangeCallback() for when this call is made.
-  function testAPI() {
-    console.log('Welcome!  Fetching your information.... ');
-    FB.api('/me', function(response) {
-      console.log('Successful login for: ' + response.name);
-      document.getElementById('status').innerHTML =
-        'Thanks for logging in, ' + response.name + '!';
-    });
-  }
-</script>
 <ol>
 <li> First, click "Allow" to allow this webpage to use your microphone.</li>
-<li> Then login to facebook:  
-<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-</fb:login-button>
+<li> Then login through Google: 
+    <div class="g-signin2" data-onsuccess="onGoogleSignIn" data-theme="dark"></div>
 <p>
 <div id="status">
 </div>
 </p>
 </li>
-<li> I need you to record the sentence "I came for information more out of curiosity than anything else.". Please listen to a synthesized sample of the word. 
-<button type="button" id="speakSampleButton" disabled="true" onclick="startSpeech('I came for information more out of curiosity than anything else.')">Click Here To Hear an Example</button></li>
+<li> I need you to record the sentence 
+<blockquote id="wordsToSpeak">I came for information more out of curiosity than anything else.</blockquote>
+Please listen to a synthesized sample of the word. 
+<button type="button" id="speakSampleButton" disabled="true" onclick="startSpeech()">Click Here To Hear an Example</button></li>
 <li> Now click <button type="button" disabled="true" id="startRecordingButton" onclick="startRecording()">Start Recording</button>
 <p>
         <div id="audioOutput"></div></p>
