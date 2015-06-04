@@ -85,8 +85,8 @@ app.post('/api/submitSample',function(req,res){
 });
 
 /*Run the server.*/
-app.listen(8000,function(){
-    console.log("Working on port 8000");
+app.listen(80,function(){
+    console.log("Working on port 80");
 });
 
 
