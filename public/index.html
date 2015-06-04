@@ -6,6 +6,7 @@
     <script src="https://apis.google.com/js/platform.js" async defer></script>
 <script>
 
+var googleUser;
 //Based on http://typedarray.org/from-microphone-to-wav-with-getusermedia-and-web-audio/
 // variables
 var leftchannel = [];
@@ -40,7 +41,7 @@ function startRecording(){
 	document.getElementById("startRecordingButton").disabled=true;
       document.getElementById("speakSampleButton").disabled=true;
       document.getElementById("listenToSampleButton").disabled=true;
-      document.getElementById("downloadSampleButton").disabled=true;
+      document.getElementById("uploadSampleButton").disabled=true;
         recording = true;
         // reset the buffers for the new recording
         leftchannel.length = rightchannel.length = 0;
@@ -54,7 +55,7 @@ function stopRecording(){
 	document.getElementById("startRecordingButton").disabled=false;
     document.getElementById("speakSampleButton").disabled=false;
       document.getElementById("listenToSampleButton").disabled=false;
-      document.getElementById("downloadSampleButton").disabled=true;
+      document.getElementById("uploadSampleButton").disabled=true;
         
         // we stop recording
         recording = false;
@@ -209,42 +210,48 @@ function samplePlayingEnded()
 	document.getElementById("stopRecordingButton").disabled=true;
 	document.getElementById("startRecordingButton").disabled=false;
       document.getElementById("speakSampleButton").disabled=false;
-      document.getElementById("downloadSampleButton").disabled=false;
+      document.getElementById("uploadSampleButton").disabled=false;
 }
-function downloadSample()
+function uploadSample()
 {
+	/*
         var link = window.document.createElement('a');
         link.href = document.getElementById("recordedSamplePlayer").src;
         link.download = 'output.wav';
         var click = document.createEvent("Event");
         click.initEvent("click", true, true);
         link.dispatchEvent(click);
+      */
         
 	  var XHR = new XMLHttpRequest();
 	  var FD  = new FormData();
 
 	  // We push our data into our FormData object
-		FD.append("userPhoto", blob);
+		FD.append("voiceSample", blob, 'sample');
+		FD.append("access_token", googleUser.getAuthResponse().access_token);
+		FD.append("user_id", googleUser.getId());
 
 	  // We define what will happen if the data are successfully sent
 	  XHR.addEventListener('load', function(event) {
-		alert('Yeah! Data sent and response loaded.');
+		//alert('Yeah! Data sent and response loaded.');
+		location.reload( true );
 	  });
 
 	  // We define what will happen in case of error
 	  XHR.addEventListener('error', function(event) {
-		alert('Oups! Something goes wrong.');
+		alert('Oops! Something goes wrong.');
 	  });
 
 	  // We setup our request
-	  XHR.open('POST', '/api/photo');
+	  XHR.open('POST', '/api/submitSample');
 
 	  // We just send our FormData object, HTTP headers are set automatically
 	  XHR.send(FD);
 }
 </script>
     <script>
-      function onGoogleSignIn(googleUser) {
+      function onGoogleSignIn(googleUserInfo) {
+        googleUser = googleUserInfo;
         // Useful data for your client-side scripts:
         var profile = googleUser.getBasicProfile();
         console.log("ID: " + profile.getId()); // Don't send this directly to your server!
@@ -254,7 +261,11 @@ function downloadSample()
 
         // The ID token you need to pass to your backend:
         var id_token = googleUser.getAuthResponse().id_token;
+        var access_token = googleUser.getAuthResponse().access_token;
         console.log("ID Token: " + id_token);
+        console.log("Access Token: " + access_token);
+        console.log("getAuthResponse: ", googleUser.getAuthResponse());
+        console.log("userId", googleUser.getId());
         
         document.getElementById("speakSampleButton").disabled=false;
       };
@@ -283,7 +294,7 @@ Please listen to a synthesized sample of the word.
 <li> When finished with your recording press <button type="button" disabled="true" id="stopRecordingButton" onclick="stopRecording()">Stop Recording</button>
     </li>
 <li> Click on the <button type="button" disabled="true" id="listenToSampleButton" onclick="listenToSample()">Listen To Sample</button> to make sure you are happy with the sample</li>
-<li> If you like you can <button type="button" disabled="true" id="downloadSampleButton" onclick="downloadSample()">Download the Sample</button></li>
+<li> Once you are ready please <button type="button" disabled="true" id="uploadSampleButton" onclick="uploadSample()">Submit the Voice Sample</button></li>
 </ol>
 
 <audio id="recordedSamplePlayer" onEnded="samplePlayingEnded()"></audio>
