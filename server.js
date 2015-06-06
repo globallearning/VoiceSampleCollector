@@ -52,7 +52,7 @@ db.close();
 
 /*Configure the multer.*/
 
-app.use('/', passport.authenticate('google', { scope:"openid profile email", successRedirect: '/',
+app.use('/', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] , successRedirect: '/',
                                     failureRedirect: 'http://www.geek.com' }), function(req,res,next){
 						 if(req.user){
 						   return express.static(path.join(__dirname, 'public'));
