@@ -13,9 +13,9 @@ var passport = require('passport')
 passport.use(new GoogleStrategy(
   JSON.parse(fs.readFileSync('./conf/google.conf', 'utf8')),
   function(accessToken, refreshToken, profile, done) {
-    User.findOrCreate({ googleId: profile.id }, function (err, user) {
-      return done(err, user);
-    });
+    //User.findOrCreate({ googleId: profile.id }, function (err, user) {
+    //  return done(err, user);
+    //});
   }
 ));
 
@@ -64,7 +64,8 @@ app.use('/', passport.authenticate('google', {
 	scope: 'openid profile email',
                                     failureRedirect: 'http://www.geek.com' }), function(req,res,next){
 						 if(req.user){
-						   return express.static(path.join(__dirname, 'public'));
+						 	console.log('USER INFO:', req.user)
+							   return express.static(path.join(__dirname, 'public'));
 						 } else {
 						   res.render(403, 'login', {message:'Please, login!'});
 						 }
