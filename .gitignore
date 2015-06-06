@@ -2,6 +2,22 @@
 logs
 *.log
 
+# Sound Recordings
+*.wav
+*/*.wav
+
+#SQLite DBs
+*.db
+*/*.db
+
+#Server Certifications
+*.pem
+*/*.pem
+*.key
+*/*.key
+*.csr
+*/*.csr
+
 # Runtime data
 pids
 *.pid
