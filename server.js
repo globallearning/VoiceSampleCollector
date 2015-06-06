@@ -12,8 +12,8 @@ var passport = require('passport')
   
     app.use(passport.initialize());
     app.use(passport.session());
-    app.use(express.methodOverride());
-    app.use(app.router);
+    //app.use(express.methodOverride());
+    //app.use(app.router);
 
 
 passport.use(new GoogleStrategy(
