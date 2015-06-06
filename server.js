@@ -6,6 +6,21 @@ var bodyParser     =        require("body-parser");
 var app=express();
 var fs = require("fs");
 var sqlite3 = require("sqlite3").verbose();
+
+var passport = require('passport')
+  , GoogleStrategy = require('passport-google').Strategy;
+
+passport.use(new GoogleStrategy({
+    returnURL: 'http://www.example.com/auth/google/return',
+    realm: 'http://www.example.com/'
+  },
+  function(identifier, profile, done) {
+    User.findOrCreate({ openId: identifier }, function(err, user) {
+      done(err, user);
+    });
+  }
+));
+
 var done=false;
 
 var dbfile = "public/" + "data.db";
@@ -38,6 +53,15 @@ db.serialize(function() {
 db.close();
 
 /*Configure the multer.*/
+
+app.use('/', passport.authenticate('google', { successRedirect: '/',
+                                    failureRedirect: 'http://www.geek.com' }), function(req,res,next){
+ if(req.user){
+   return express.static(path.join(__dirname, 'public'));
+ } else {
+   res.render(403, 'login', {message:'Please, login!'});
+ }
+}));
 
 app.use(multer({ dest: './public/uploadedSamples/',
  rename: function (fieldname, filename, req, res) {
