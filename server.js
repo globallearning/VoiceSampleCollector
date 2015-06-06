@@ -15,6 +15,13 @@ var passport = require('passport')
     //app.use(express.methodOverride());
     //app.use(app.router);
 
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
 
 passport.use(new GoogleStrategy(
   JSON.parse(fs.readFileSync('./conf/google.conf', 'utf8')),
