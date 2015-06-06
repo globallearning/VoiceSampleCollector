@@ -10,21 +10,10 @@ var sqlite3 = require("sqlite3").verbose();
 var passport = require('passport')
   , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
   
-  app.configure(function() {
-
-    app.set('views',  './views');
-    app.set('view engine', 'jade');
-    app.use(express.favicon());
-    app.use(express.logger('dev'));
-    app.use(express.cookieParser());
-    app.use(express.bodyParser());
-    app.use(express.session({secret:'MySecret'}));
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(express.methodOverride());
     app.use(app.router);
-//    app.use(express.static('./public'));
-});
 
 
 passport.use(new GoogleStrategy(
