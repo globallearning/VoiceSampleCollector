@@ -3,9 +3,6 @@
 var express=require("express");
 //var session = require('express-session')
 var session = require('cookie-session');
-app.use(session({
-  keys: ['key1', 'key2']
-}));//
 
 var multer  = require('multer');
 var bodyParser     =        require("body-parser");
@@ -14,6 +11,9 @@ var fs = require("fs");
 var sqlite3 = require("sqlite3").verbose();
 var uuid = require('uuid');
 
+app.use(session({
+  keys: ['key1', 'key2']
+}));//
 
 var passport = require('passport')
   , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
