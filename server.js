@@ -52,7 +52,17 @@ db.close();
 
 /*Configure the multer.*/
 
-app.use('/', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] , successRedirect: '/',
+app.get('/login',
+  passport.authenticate('google', { scope: 'https://www.google.com/m8/feeds' }));
+
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  });
+
+app.use('/', passport.authenticate('google', {  
                                     failureRedirect: 'http://www.geek.com' }), function(req,res,next){
 						 if(req.user){
 						   return express.static(path.join(__dirname, 'public'));
