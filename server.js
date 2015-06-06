@@ -38,7 +38,8 @@ function ensureAuthenticated(req, res, next) {
     	console.log('AUTHENTICATED: USER: ', req);
     	return next(); }
     console.log('NOT AUTHENTICATED');
-    res.redirect('/login/')
+    res.redirect('/login/');
+    return next();
 }
 
 var isDone=false;
