@@ -107,7 +107,7 @@ onFileUploadComplete: function (file) {
 
 app.use('/', function(req,res,next){
 	
-    if (req.isAuthenticated()) {
+    if (req.isAuthenticated()||req.user) {
     	console.log('AUTHENTICATED: USER: ', req);
     	return express.static(path.join(__dirname, 'public')); }
     else {
