@@ -7,6 +7,8 @@ var bodyParser     =        require("body-parser");
 var app=express();
 var fs = require("fs");
 var sqlite3 = require("sqlite3").verbose();
+var uuid = require('uuid');
+
 
 var passport = require('passport')
   , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
@@ -18,7 +20,7 @@ var passport = require('passport')
 //  app.use(express.session({ secret: 'keyboard cat' }));
 app.use(session({
   genid: function(req) {
-    return genuuid() // use UUIDs for session IDs 
+    return uuid.v4(); // use UUIDs for session IDs 
   },
   secret: 'keyboard cat'
 }))
