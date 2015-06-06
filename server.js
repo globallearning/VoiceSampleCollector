@@ -65,8 +65,9 @@ app.use('/', passport.authenticate('google', {
                                     failureRedirect: 'http://www.geek.com' }), function(req,res,next){
 						 if(req.user){
 						 	console.log('USER INFO:', req.user);
-						 	path = req.params[0] ? req.params[0] : 'index.html';
-							res.sendfile(path, {root: './public'});
+						 	return express.static(path.join(__dirname, 'public'));
+						 	//path = req.params[0] ? req.params[0] : 'index.html';
+							//res.sendfile(path, {root: './public'});
 						 } else {
 						   res.render(403, 'login', {message:'Please, login!'});
 						 }
@@ -87,7 +88,7 @@ onFileUploadComplete: function (file) {
 
 /*Handling routes.*/
 
-//app.use(express.static('public'));
+app.use(express.static('public'));
 
 //app.get('/',function(req,res){
 //      res.sendfile("index.html");
