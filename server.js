@@ -117,7 +117,7 @@ app.use('/', function(req,res,next){
 });
 
 //serve routes
-app.use(app.router);
+//app.use(app.router); Not needed anymore
 
 //app.get('/',function(req,res){
 //      res.sendfile("index.html");
