@@ -137,6 +137,8 @@ app.use('/', function(req,res,done){
 //      res.sendfile("index.html");
 //});
 
+app.use(express.static('public'));
+
 app.post('/api/submitSample',function(req,res){
   if(isDone==true){
     console.log(req.files);
