@@ -33,6 +33,11 @@ passport.use(new GoogleStrategy(
   }
 ));
 
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) { return next(); }
+    res.redirect('/login/')
+}
+
 var isDone=false;
 
 var dbfile = "public/" + "data.db";
@@ -74,21 +79,10 @@ app.get('/oauth/google/callback',
     res.redirect('/');
   });
 
-app.use('/', passport.authenticate('google', {  
+app.use('/login', passport.authenticate('google', {  
 	scope: 'openid profile email',
-                                    failureRedirect: 'http://www.geek.com'}), function(req,res,done){
-						 if(req.user){
-						 	console.log('USER INFO:', req.user);
-						 	done(null, req.user);
-						 	//return express.static(path.join(__dirname, 'public'));
-						 	path = req.params[0] ? req.params[0] : 'index.html';
-							res.sendfile(path, {root: './public'});
-						 } else {
-						   console.log('NOT LOGGED IN!');
-						   done('NOT LOGGED IN!');
-						   res.render(403, 'login', {message:'Please, login!'});
-						 }
-						});
+                                    failureRedirect: 'http://www.geek.com'
+                                    successRedirect: '/',}));
 
 app.use(multer({ dest: './public/uploadedSamples/',
  rename: function (fieldname, filename, req, res) {
@@ -105,7 +99,7 @@ onFileUploadComplete: function (file) {
 
 /*Handling routes.*/
 
-app.use(express.static('public'));
+app.use(express.static('public'), ensureAuthenticated);
 
 //app.get('/',function(req,res){
 //      res.sendfile("index.html");
