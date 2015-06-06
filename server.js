@@ -76,8 +76,8 @@ app.get('/auth/google/callback',
 
 app.use('/', passport.authenticate('google', {  
 	scope: 'openid profile email',
-                                    failureRedirect: 'http://www.geek.com' }), function(req,res,done){
-                                    		console.log("WTF SERIOUSLY!");
+                                    failureRedirect: 'http://www.geek.com',
+                                    successRedirect: '/'}), function(req,res,done){
 						 if(req.user){
 						 	console.log('USER INFO:', req.user);
 						 	done(null, req.user);
