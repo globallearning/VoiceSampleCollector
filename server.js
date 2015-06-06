@@ -76,7 +76,7 @@ onFileUploadComplete: function (file) {
 
 /*Handling routes.*/
 
-app.use(express.static('public'));
+//app.use(express.static('public'));
 
 //app.get('/',function(req,res){
 //      res.sendfile("index.html");
