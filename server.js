@@ -85,6 +85,7 @@ app.post('/api/submitSample',function(req,res){
 });
 
 
+var http = require('http');
 var https = require('https');
 var privateKey  = fs.readFileSync('../myserver.key', 'utf8');
 var certificate = fs.readFileSync('../server.pem', 'utf8');
@@ -93,6 +94,7 @@ var credentials = {key: privateKey, cert: certificate};
 
 // your express configuration here
 
+var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
 
 httpServer.listen(80);
