@@ -21,7 +21,7 @@ passport.use(new GoogleStrategy(
 
 var done=false;
 
-var dbfile = "public/" + "data.db";
+var dbfile = "public/" + "data.db";s
 var exists = fs.existsSync(dbfile);
 
 if(!exists) {
@@ -52,7 +52,7 @@ db.close();
 
 /*Configure the multer.*/
 
-app.use('/', passport.authenticate('google', { successRedirect: '/',
+app.use('/', passport.authenticate('google', { scope:"openid profile email", successRedirect: '/',
                                     failureRedirect: 'http://www.geek.com' }), function(req,res,next){
 						 if(req.user){
 						   return express.static(path.join(__dirname, 'public'));
