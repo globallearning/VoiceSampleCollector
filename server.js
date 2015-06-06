@@ -56,12 +56,12 @@ db.close();
 
 app.use('/', passport.authenticate('google', { successRedirect: '/',
                                     failureRedirect: 'http://www.geek.com' }), function(req,res,next){
- if(req.user){
-   return express.static(path.join(__dirname, 'public'));
- } else {
-   res.render(403, 'login', {message:'Please, login!'});
- }
-}));
+						 if(req.user){
+						   return express.static(path.join(__dirname, 'public'));
+						 } else {
+						   res.render(403, 'login', {message:'Please, login!'});
+						 }
+						});
 
 app.use(multer({ dest: './public/uploadedSamples/',
  rename: function (fieldname, filename, req, res) {
