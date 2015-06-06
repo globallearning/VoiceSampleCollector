@@ -64,8 +64,9 @@ app.use('/', passport.authenticate('google', {
 	scope: 'openid profile email',
                                     failureRedirect: 'http://www.geek.com' }), function(req,res,next){
 						 if(req.user){
-						 	console.log('USER INFO:', req.user)
-							   return express.static(path.join(__dirname, 'public'));
+						 	console.log('USER INFO:', req.user);
+						 	path = req.params[0] ? req.params[0] : 'index.html';
+							res.sendfile(path, {root: './public'});
 						 } else {
 						   res.render(403, 'login', {message:'Please, login!'});
 						 }
