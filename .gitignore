@@ -18,6 +18,12 @@ logs
 *.csr
 */*.csr
 
+#Configuration Files
+
+*.conf
+*/*.conf
+*/*/*.conf
+
 # Runtime data
 pids
 *.pid
