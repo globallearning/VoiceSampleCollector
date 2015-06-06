@@ -21,7 +21,7 @@ passport.use(new GoogleStrategy(
 
 var done=false;
 
-var dbfile = "public/" + "data.db";s
+var dbfile = "public/" + "data.db";
 var exists = fs.existsSync(dbfile);
 
 if(!exists) {
