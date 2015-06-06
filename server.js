@@ -112,7 +112,7 @@ app.use('/', function(req,res,next){
     	return express.static(path.join(__dirname, 'public')); }
     else {
     console.log('NOT AUTHENTICATED');
-    return res.redirect('/login/');
+    return res.redirect('/login');
 }
 });
 
