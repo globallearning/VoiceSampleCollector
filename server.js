@@ -1,6 +1,7 @@
 /*Define dependencies.*/
 
 var express=require("express");
+var session = require('express-session')
 var multer  = require('multer');
 var bodyParser     =        require("body-parser");
 var app=express();
@@ -12,9 +13,15 @@ var passport = require('passport')
   
     app.use(passport.initialize());
     app.use(passport.session());
-  app.use(express.cookieParser());
-  app.use(express.bodyParser());
-  app.use(express.session({ secret: 'keyboard cat' }));
+//  app.use(express.cookieParser());
+//  app.use(express.bodyParser());
+//  app.use(express.session({ secret: 'keyboard cat' }));
+app.use(session({
+  genid: function(req) {
+    return genuuid() // use UUIDs for session IDs 
+  },
+  secret: 'keyboard cat'
+}))
     //app.use(express.methodOverride());
     //app.use(app.router);
 
