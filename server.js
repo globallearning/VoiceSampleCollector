@@ -67,7 +67,7 @@ db.close();
 /*Configure the multer.*/
 
 
-app.get('/auth/google/callback', 
+app.get('/oauth/google/callback', 
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
     // Successful authentication, redirect home.
