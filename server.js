@@ -65,6 +65,7 @@ app.use('/', passport.authenticate('google', {
                                     failureRedirect: 'http://www.geek.com' }), function(req,res,next){
 						 if(req.user){
 						 	console.log('USER INFO:', req.user);
+						 	done(null, req.user);
 						 	return express.static(path.join(__dirname, 'public'));
 						 	//path = req.params[0] ? req.params[0] : 'index.html';
 							//res.sendfile(path, {root: './public'});
