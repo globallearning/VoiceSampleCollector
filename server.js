@@ -34,7 +34,10 @@ passport.use(new GoogleStrategy(
 ));
 
 function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) { return next(); }
+    if (req.isAuthenticated()) {
+    	console.log('AUTHENTICATED: USER: ', req);
+    	return next(); }
+    console.log('NOT AUTHENTICATED');
     res.redirect('/login/')
 }
 
