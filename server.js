@@ -121,7 +121,7 @@ app.use('/', function(req,res,next){
 	
     if (req.isAuthenticated()||req.user) {
     	console.log('AUTHENTICATED: USER: ', req);
-    	return express.static(path.join(__dirname, 'public')); }
+    	return express.static('public'); }
     else {
     console.log('NOT AUTHENTICATED');
     return res.redirect('/login');
