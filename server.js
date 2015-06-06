@@ -8,15 +8,13 @@ var fs = require("fs");
 var sqlite3 = require("sqlite3").verbose();
 
 var passport = require('passport')
-  , GoogleStrategy = require('passport-google').Strategy;
+  , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
-passport.use(new GoogleStrategy({
-    returnURL: 'http://www.example.com/auth/google/return',
-    realm: 'http://www.example.com/'
-  },
-  function(identifier, profile, done) {
-    User.findOrCreate({ openId: identifier }, function(err, user) {
-      done(err, user);
+passport.use(new GoogleStrategy(
+  JSON.parse(fs.readFileSync('./conf/google.conf', 'utf8')),
+  function(accessToken, refreshToken, profile, done) {
+    User.findOrCreate({ googleId: profile.id }, function (err, user) {
+      return done(err, user);
     });
   }
 ));
