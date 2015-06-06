@@ -115,21 +115,20 @@ onFileUploadComplete: function (file) {
 
 /*Handling routes.*/
 
-//app.use(express.static('public'), ensureAuthenticated);
 
 app.use('/', function(req,res,done){
 	
     if (req.isAuthenticated()||req.user) {
     	console.log('AUTHENTICATED: USER: ', req);
-    	express.static('public');
+    	//express.static('public');
     	done();
     }
     else {
     console.log('NOT AUTHENTICATED');
     res.redirect('/login');
-    done();
 }
 });
+
 
 //serve routes
 //app.use(app.router); Not needed anymore
