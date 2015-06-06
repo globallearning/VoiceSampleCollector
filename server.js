@@ -19,7 +19,7 @@ passport.use(new GoogleStrategy(
   }
 ));
 
-var done=false;
+var isDone=false;
 
 var dbfile = "public/" + "data.db";
 var exists = fs.existsSync(dbfile);
@@ -70,6 +70,7 @@ app.use('/', passport.authenticate('google', {
 						 	//path = req.params[0] ? req.params[0] : 'index.html';
 							//res.sendfile(path, {root: './public'});
 						 } else {
+						   done('NOT LOGGED IN!');
 						   res.render(403, 'login', {message:'Please, login!'});
 						 }
 						});
@@ -83,7 +84,7 @@ onFileUploadStart: function (file) {
 },
 onFileUploadComplete: function (file) {
   console.log(file.fieldname + ' uploaded to  ' + file.path)
-  done=true;
+  isDone=true;
 }
 }));
 
@@ -96,7 +97,7 @@ app.use(express.static('public'));
 //});
 
 app.post('/api/submitSample',function(req,res){
-  if(done==true){
+  if(isDone==true){
     console.log(req.files);
     console.log(req.files.voiceSample.path);
     console.log(req.body);
