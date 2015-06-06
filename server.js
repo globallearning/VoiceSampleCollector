@@ -92,7 +92,7 @@ app.post('/api/submitSample',function(req,res){
 		//stmt.run( "arctic_a0058", req.body.user_id, req.files.voiceSample.name )
 		//stmt.finalize();
   
-	  db.each("SELECT phraseid FROM Phrases WHERE NOT EXISTS (SELECT * FROM Samples WHERE phraseid=phraseid) LIMIT 1",
+	  db.each("SELECT phraseid FROM Phrases WHERE NOT EXISTS (SELECT * FROM Samples WHERE phraseid=Phrases.phraseid) LIMIT 1",
 	  function(err, row) {
 	  	if(err)
 	  		console.log('ERROR:', err);
