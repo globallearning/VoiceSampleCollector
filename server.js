@@ -81,7 +81,7 @@ app.get('/oauth/google/callback',
 
 app.use('/login', passport.authenticate('google', {  
 	scope: 'openid profile email',
-                                    failureRedirect: 'http://www.geek.com'
+                                    failureRedirect: 'http://www.geek.com',
                                     successRedirect: '/'}));
 
 app.use(multer({ dest: './public/uploadedSamples/',
