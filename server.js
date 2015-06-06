@@ -61,7 +61,7 @@ app.get('/auth/google/callback',
   });
 
 app.use('/', passport.authenticate('google', {  
-	scope: 'https://www.googleapis.com/auth/plus.me https://www.google.com/m8/feeds https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+	scope: 'openid profile email',
                                     failureRedirect: 'http://www.geek.com' }), function(req,res,next){
 						 if(req.user){
 						   return express.static(path.join(__dirname, 'public'));
