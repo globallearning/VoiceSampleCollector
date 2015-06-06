@@ -70,6 +70,7 @@ app.use('/', passport.authenticate('google', {
 						 	//path = req.params[0] ? req.params[0] : 'index.html';
 							//res.sendfile(path, {root: './public'});
 						 } else {
+						   console.log('NOT LOGGED IN!');
 						   done('NOT LOGGED IN!');
 						   res.render(403, 'login', {message:'Please, login!'});
 						 }
