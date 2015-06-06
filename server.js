@@ -117,14 +117,17 @@ onFileUploadComplete: function (file) {
 
 //app.use(express.static('public'), ensureAuthenticated);
 
-app.use('/', function(req,res,next){
+app.use('/', function(req,res,done){
 	
     if (req.isAuthenticated()||req.user) {
     	console.log('AUTHENTICATED: USER: ', req);
-    	return express.static('public'); }
+    	express.static('public');
+    	done();
+    }
     else {
     console.log('NOT AUTHENTICATED');
-    return res.redirect('/login');
+    res.redirect('/login');
+    done();
 }
 });
 
