@@ -84,10 +84,23 @@ app.post('/api/submitSample',function(req,res){
   }
 });
 
+
+var https = require('https');
+var privateKey  = fs.readFileSync('../myserver.key', 'utf8');
+var certificate = fs.readFileSync('../server.pem', 'utf8');
+
+var credentials = {key: privateKey, cert: certificate};
+
+// your express configuration here
+
+var httpsServer = https.createServer(credentials, app);
+
+httpServer.listen(80);
+httpsServer.listen(443);
 /*Run the server.*/
-app.listen(80,function(){
-    console.log("Working on port 80");
-});
+//app.listen(80,function(){
+//    console.log("Working on port 80");
+//});
 
 
 
