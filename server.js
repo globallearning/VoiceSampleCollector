@@ -85,6 +85,20 @@ app.post('/api/submitSample',function(req,res){
 });
 
 
+	var db = new sqlite3.Database(dbfile);
+
+	db.serialize(function() {
+		//var stmt = db.prepare("INSERT INTO Samples VALUES (?,?,?)");
+		//stmt.run( "arctic_a0058", req.body.user_id, req.files.voiceSample.name )
+		//stmt.finalize();
+  
+	  db.each("SELECT TOP 1 phraseid FROM Phrases WHERE NOT EXISTS (SELECT * FROM Samples WHERE phraseid=phraseid)", function(err, row) {
+		console.log(row.id + ": " + row.phraseid + ": " + row.userId + ": " + row.fileName);
+	  });
+	});
+
+	db.close();
+	
 var http = require('http');
 var https = require('https');
 var privateKey  = fs.readFileSync('../myserver.key', 'utf8');
