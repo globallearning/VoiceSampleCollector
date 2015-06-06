@@ -93,7 +93,7 @@ app.post('/api/submitSample',function(req,res){
 		//stmt.finalize();
   
 	  db.each("SELECT TOP 1 phraseid FROM Phrases WHERE NOT EXISTS (SELECT * FROM Samples WHERE phraseid=phraseid)", function(err, row) {
-		console.log(row.id + ": " + row.phraseid + ": " + row.userId + ": " + row.fileName);
+		console.log(row.phraseid, ":", row.words);
 	  });
 	});
 
