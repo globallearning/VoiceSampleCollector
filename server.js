@@ -1,7 +1,12 @@
 /*Define dependencies.*/
 
 var express=require("express");
-var session = require('express-session')
+//var session = require('express-session')
+var session = require('cookie-session');
+app.use(session({
+  keys: ['key1', 'key2']
+}));//
+
 var multer  = require('multer');
 var bodyParser     =        require("body-parser");
 var app=express();
@@ -18,12 +23,7 @@ var passport = require('passport')
 //  app.use(express.cookieParser());
 //  app.use(express.bodyParser());
 //  app.use(express.session({ secret: 'keyboard cat' }));
-app.use(session({
-  genid: function(req) {
-    return uuid.v4(); // use UUIDs for session IDs 
-  },
-  secret: 'keyboard cat'
-}))
+
     //app.use(express.methodOverride());
     //app.use(app.router);
 
