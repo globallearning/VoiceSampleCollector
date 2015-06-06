@@ -103,7 +103,21 @@ onFileUploadComplete: function (file) {
 
 /*Handling routes.*/
 
-app.use(express.static('public'), ensureAuthenticated);
+//app.use(express.static('public'), ensureAuthenticated);
+
+app.use('/', function(req,res,next){
+	
+    if (req.isAuthenticated()) {
+    	console.log('AUTHENTICATED: USER: ', req);
+    	return express.static(path.join(__dirname, 'public')); }
+    else {
+    console.log('NOT AUTHENTICATED');
+    return res.redirect('/login/');
+}
+});
+
+//serve routes
+app.use(app.router);
 
 //app.get('/',function(req,res){
 //      res.sendfile("index.html");
